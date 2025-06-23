@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {TextField,Button,Container,Typography,Box,Link } from '@mui/material';
+import {Log} from '../../Logging Middleware/logging';
 
 function App() {
   const [longUrl, setLongUrl] = useState('');
@@ -10,10 +11,15 @@ function App() {
 
   const handleShorten = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/shorten', {longUrl,shortCode,validity});
+      const response = await axios.post('http://localhost:5000/shorten', { longUrl, shortCode, validity });
       setShortUrl(response.data.shortUrl);
+
+  await Log("frontend", "info", "component", "URL shortened successfully");
     }
-    catch (error) {alert('Error shortening URL');}
+    catch (error) {
+await Log("frontend", "error", "api", "Error shortening URL");
+      alert('Error shortening URL');
+    }
   };
 return (
     <Container maxWidth="sm">
